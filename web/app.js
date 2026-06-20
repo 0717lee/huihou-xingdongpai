@@ -1,56 +1,18 @@
-// ========== 示例会议记录 ==========
-const SAMPLE_MEETING = `产品周会 · 2024年3月15日
-
-参会人员：张明、李娜、王强、赵雪、陈晨
-
-1. 张明负责本周五前完成新版首页设计稿，比较紧急。
-2. 李娜跟进用户调研报告，下周一前提交。
-3. 王强说后端接口开发需要等赵雪的数据库设计完成才能开始。
-4. 营销活动的方案还没定，需要再讨论一下。
-5. 赵雪负责数据库设计，本周三前完成。
-6. 下周要做一次全员产品培训，时间待定。
-7. 张明还要准备客户演示PPT，截止时间下周三。
-8. 陈晨需要整理上版本用户反馈，本周内完成。`;
-
-// ========== 阶段2：场景配置（meeting / chat / assignment） ==========
-const SAMPLE_CHAT = `项目沟通群 · 2024年3月15日
-
-@张明 客户那边的首页设计稿本周五前一定要给到，比较急。
-@李娜 用户调研报告下周一前发我邮箱。
-@王强 后端接口你先等着，赵雪把数据库设计完你再开工。
-@赵雪 数据库设计本周三前搞定，辛苦。
-营销活动方案大家再想想，下次会议定。
-下周做一次全员产品培训，时间另行通知。
-@张明 客户演示PPT下周三前准备好。
-@陈晨 上版本用户反馈本周内整理出来发群里。`;
-
-const SAMPLE_ASSIGNMENT = `任务布置 · 2024年3月15日
-
-致项目组全体成员：
-
-1. 张明，请在周五下班前完成新版首页设计稿，客户演示要用，优先级高。
-2. 李娜，下周一前提交用户调研报告，需包含竞品分析和用户访谈结论。
-3. 赵雪，本周三前完成数据库设计文档，王强的接口开发依赖此文档。
-4. 王强，赵雪数据库设计完成后立即开始后端接口开发，预计下周五前完成核心接口。
-5. 陈晨，本周内整理上版本用户反馈，按问题类型分类汇总。`;
-
+// ========== 场景配置（meeting / chat / assignment） ==========
 const SCENES = {
   meeting: {
     label: '会议内容输入区',
     placeholder: '把会议纪要粘贴到这里...',
-    sample: SAMPLE_MEETING,
     emptyHint: '在左侧粘贴会议内容并点击"生成方案"<br>这里将展示结构化的行动方案'
   },
   chat: {
     label: '群聊记录输入区',
     placeholder: '把群聊记录粘贴到这里...',
-    sample: SAMPLE_CHAT,
     emptyHint: '在左侧粘贴群聊记录并点击"生成方案"<br>这里将展示结构化的行动方案'
   },
   assignment: {
     label: '任务布置输入区',
     placeholder: '把任务布置内容粘贴到这里...',
-    sample: SAMPLE_ASSIGNMENT,
     emptyHint: '在左侧粘贴任务布置内容并点击"生成方案"<br>这里将展示结构化的行动方案'
   }
 };
@@ -305,8 +267,7 @@ function switchScene(scene){
   document.getElementById('inputLabel').textContent = cfg.label;
   const area = document.getElementById('inputArea');
   area.placeholder = cfg.placeholder;
-  // 切换场景时清空输入与输出，避免误用旧内容
-  area.value = '';
+  // 切换场景时保留输入内容，仅清空输出结果
   currentResult = null;
   updateCharCount();
   showState('empty');
@@ -318,13 +279,6 @@ document.querySelectorAll('.scene-btn').forEach(btn => {
 
 // 输入实时字数统计
 document.getElementById('inputArea').addEventListener('input', updateCharCount);
-
-document.getElementById('sampleBtn').addEventListener('click', () => {
-  const area = document.getElementById('inputArea');
-  area.value = SCENES[currentScene].sample;
-  area.placeholder = SCENES[currentScene].placeholder;
-  updateCharCount();
-});
 
 document.getElementById('clearBtn').addEventListener('click', () => {
   const area = document.getElementById('inputArea');
@@ -442,7 +396,7 @@ document.getElementById('generateBtn').addEventListener('click', () => {
   if(!text){
     const inputArea = document.getElementById('inputArea');
     inputArea.style.borderColor = 'var(--vermilion)';
-    inputArea.placeholder = '请先粘贴内容，或点击"示例"...';
+    inputArea.placeholder = '请先粘贴内容后再生成...';
     setTimeout(() => { inputArea.style.borderColor = ''; }, 2000);
     return;
   }
