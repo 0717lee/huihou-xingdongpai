@@ -17,3 +17,8 @@ Thumbs.db
 # 编辑器
 .vscode/
 .idea/
+
+# 项目文档与截图（本地保留，不入库）
+docs/
+screenshots/
+progress.md
